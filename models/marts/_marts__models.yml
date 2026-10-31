@@ -12,12 +12,22 @@ models:
         data_tests: [unique, not_null]
       - name: customer_id
         description: "Клиент, оформивший заказ."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
       - name: order_date
         description: "Дата заказа."
       - name: ordered_at
         description: "Время оформления заказа."
       - name: order_status
         description: "Статус заказа: paid, pending, returned, cancelled."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['paid', 'pending', 'returned', 'cancelled']
       - name: order_amount
         description: "Сумма заказа в рублях после скидок."
       - name: paid_amount
@@ -33,3 +43,58 @@ models:
       - name: is_confirmed
         description: "Подтверждённая покупка: статус paid и хотя бы одна успешная оплата."
         data_tests: [not_null]
+  - name: fct_order_items
+    description: "Факт позиций: одна строка — один товар в заказе. Исключены позиции тестовых заказов."
+    columns:
+      - name: order_item_id
+        description: "Ключ позиции вида 101-1."
+        data_tests: [unique, not_null]
+      - name: order_id
+        description: "Номер заказа."
+        data_tests: [not_null]
+      - name: product_id
+        description: "Номер товара."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+      - name: customer_id
+        description: "Клиент, оформивший заказ."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: order_date
+        description: "Дата заказа."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_dates')
+                field: date_key
+      - name: quantity
+        description: "Количество товара."
+        data_tests: [non_negative]
+      - name: line_amount
+        description: "Сумма позиции после скидки."
+        data_tests: [non_negative]
+  - name: dim_customers
+    description: "Измерение клиентов: одна строка — один клиент (включая не купивших)."
+    columns:
+      - name: customer_id
+        description: "Номер клиента."
+        data_tests: [unique, not_null]
+  - name: dim_products
+    description: "Измерение товаров: одна строка — один товар."
+    columns:
+      - name: product_id
+        description: "Номер товара."
+        data_tests: [unique, not_null]
+  - name: dim_dates
+    description: "Календарь: одна строка — один день."
+    columns:
+      - name: date_key
+        description: "Дата (суррогатный ключ)."
+        data_tests: [unique, not_null]
