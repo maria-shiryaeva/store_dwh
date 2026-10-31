@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "Витрина заказов: одна строка — один заказ. Исключены тестовые заказы."
+    columns:
+      - name: order_id
+        description: "Номер заказа."
+        data_tests:
+          - unique
+          - not_null
+      - name: is_confirmed
+        description: "Признак подтвержденной покупки (статус paid и есть успешная оплата)."
+        data_tests:
+          - not_null

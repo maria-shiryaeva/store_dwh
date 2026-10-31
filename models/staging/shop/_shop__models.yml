@@ -23,7 +23,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ['paid', 'pending', 'returned', 'cancelled', 'test']
+                values: ['paid', 'pending', 'returned', 'cancelled']
       - name: order_amount
         description: "Сумма заказа в рублях после скидок."
 
