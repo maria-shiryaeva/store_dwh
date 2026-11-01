@@ -41,7 +41,7 @@ models:
       - name: first_paid_at
         description: "Время первой успешной оплаты; пусто, если оплат нет."
       - name: is_confirmed
-        description: "Подтверждённая покупка: статус paid и хотя бы одна успешная оплата."
+        description: '{{ doc("confirmed_order") }}'
         data_tests: [not_null]
   - name: fct_order_items
     description: "Факт позиций: одна строка — один товар в заказе. Исключены позиции тестовых заказов."
@@ -73,7 +73,7 @@ models:
           - relationships:
               arguments:
                 to: ref('dim_dates')
-                field: date_key
+                field: date_sk
       - name: quantity
         description: "Количество товара."
         data_tests: [non_negative]
@@ -95,6 +95,6 @@ models:
   - name: dim_dates
     description: "Календарь: одна строка — один день."
     columns:
-      - name: date_key
+      - name: date_sk
         description: "Дата (суррогатный ключ)."
         data_tests: [unique, not_null]
