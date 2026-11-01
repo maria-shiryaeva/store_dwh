@@ -3,12 +3,12 @@
 ) }}
 
 with customers as (
-    select * from {{ ref('stg_shop__customers') }}
+    select * 
+    from {{ ref('stg_shop__customers') }}
 ),
 
 customer_orders as (
-    select 
-        customer_id,
+    select customer_id,
         min(order_id) filter (where is_confirmed) as first_confirmed_order_id,
         min(ordered_at) filter (where is_confirmed) as first_confirmed_at,
         count(*) filter (where is_confirmed) as confirmed_orders_count,
@@ -18,8 +18,7 @@ customer_orders as (
     group by customer_id
 )
 
-select
-    c.customer_id,
+select c.customer_id,
     c.registration_date,
     c.city,
     c.acquisition_channel,

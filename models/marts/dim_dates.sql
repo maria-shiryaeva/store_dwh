@@ -8,8 +8,7 @@ with date_spine as (
     ) }}
 )
 
-select
-    date_day::date as date_sk,
+select date_day::date as date_sk,
     extract(year from date_day)::int as year,
     extract(quarter from date_day)::int as quarter,
     extract(month from date_day)::int as month,
